@@ -14,7 +14,11 @@ class TargetTracker:
     def state(self) -> TrackState | None:
         return self._state
 
-    def update(self, detection: Detection) -> TrackState:
+    def update(self, detection: Detection | None) -> TrackState | None:
+        if detection is None:
+            self._state = None
+            return None
+
         observed = detection.bbox.center
 
         if self._state is None:

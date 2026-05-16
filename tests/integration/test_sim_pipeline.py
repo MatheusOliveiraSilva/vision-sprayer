@@ -1,8 +1,8 @@
-from vision_sprayer.pipeline.orchestrator import SprayerOrchestrator
+from vision_sprayer.pipeline.factories import create_sim_pipeline
 
 
 def test_orchestrator_runs_complete_fake_pipeline() -> None:
-    orchestrator = SprayerOrchestrator.default(width=320, height=240)
+    orchestrator = create_sim_pipeline(width=320, height=240)
 
     snapshot = orchestrator.tick(now=1.0, dt=0.016)
 
@@ -15,7 +15,7 @@ def test_orchestrator_runs_complete_fake_pipeline() -> None:
 
 
 def test_orchestrator_preserves_state_across_ticks() -> None:
-    orchestrator = SprayerOrchestrator.default(width=320, height=240)
+    orchestrator = create_sim_pipeline(width=320, height=240)
 
     first = orchestrator.tick(now=1.0, dt=0.016)
     second = orchestrator.tick(now=1.1, dt=0.1)

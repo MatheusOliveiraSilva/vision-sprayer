@@ -1,8 +1,8 @@
 # Vision Sprayer
 
-V0 simulation for a perception -> decision -> fake actuation loop.
+Realtime perception -> decision -> fake actuation loop.
 
-The first goal is not visual realism. The first goal is to see the runtime loop alive and keep the core behavior testable.
+The first goal is to see the runtime loop alive and keep the core behavior testable.
 
 ## Architecture
 
@@ -22,6 +22,9 @@ Runtime flow:
 ```text
 SimulatedFrameSource -> SimulatedDetector -> TargetTracker
   -> TargetingPolicy -> FakeActuator -> MetricsCollector -> PygameRenderer
+
+OpenCVCameraSource -> YoloBottleDetector -> TargetTracker
+  -> TargetingPolicy -> FakeActuator -> MetricsCollector -> OpenCVRenderer
 ```
 
 ## Responsibility boundaries
@@ -35,24 +38,41 @@ SimulatedFrameSource -> SimulatedDetector -> TargetTracker
 - `Renderer`: draws state and metrics; no decision logic belongs here.
 - `Orchestrator`: wires components and owns the frame lifecycle.
 
-## Run
+## Setup
 
 ```bash
 uv sync --extra dev --no-editable
-source .venv/bin/activate
-PYTHONPATH=src python -m vision_sprayer.app
 ```
 
-Or without activating the environment:
+## Simulation
 
 ```bash
-PYTHONPATH=src uv run python -m vision_sprayer.app
+PYTHONPATH=src uv run python -m vision_sprayer.app sim
 ```
 
-Or through the CLI script:
+## Camera Sources
 
 ```bash
-PYTHONPATH=src uv run vision-sprayer
+PYTHONPATH=src uv run python -m vision_sprayer.app cameras
+```
+
+On macOS with iPhone, connect the iPhone with USB, trust the Mac if prompted, and select/enable Continuity Camera if macOS asks. The camera source is usually `0`, but confirm with the `cameras` command.
+
+## Camera + YOLO Bottle Detection
+
+```bash
+PYTHONPATH=src uv run python -m vision_sprayer.app camera --source 0 --device cpu
+```
+
+Useful options:
+
+```bash
+--model yolo11n.pt
+--target bottle
+--confidence 0.25
+--device cpu
+--device mps
+--no-window
 ```
 
 ## Test
@@ -64,13 +84,6 @@ uv run pytest
 ## Smoke
 
 ```bash
-PYTHONPATH=src SDL_VIDEODRIVER=dummy uv run python -m vision_sprayer.app --smoke-frames 5
-```
-
-## Troubleshooting
-
-If `python -m vision_sprayer.app` says `No module named 'vision_sprayer'`, run it with the source path:
-
-```bash
-PYTHONPATH=src python -m vision_sprayer.app
+PYTHONPATH=src SDL_VIDEODRIVER=dummy uv run python -m vision_sprayer.app sim --smoke-frames 5
+PYTHONPATH=src uv run python -m vision_sprayer.app camera --source 0 --device cpu --smoke-frames 1 --no-window
 ```

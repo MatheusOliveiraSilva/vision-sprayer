@@ -40,3 +40,20 @@ def test_tracker_smooths_subsequent_detections() -> None:
 
     assert state.target_center == Point(50, 25)
     assert state.age_frames == 2
+
+
+def test_tracker_clears_state_when_detection_is_missing() -> None:
+    tracker = TargetTracker(smoothing=0.5)
+    tracker.update(
+        Detection(
+            frame_sequence=1,
+            observed_at=10,
+            bbox=Rect(center=Point(20, 30), width=10, height=10),
+            confidence=1,
+        )
+    )
+
+    state = tracker.update(None)
+
+    assert state is None
+    assert tracker.state is None

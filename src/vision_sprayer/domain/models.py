@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from math import hypot
+from typing import Any
 from typing import Self
 
 
@@ -44,7 +45,8 @@ class Frame:
     produced_at: float
     width: int
     height: int
-    target: Rect
+    target: Rect | None = None
+    image_bgr: Any | None = None
 
 
 @dataclass(frozen=True)
@@ -84,6 +86,7 @@ class RuntimeSample:
     frame_age_ms: float
     loop_latency_ms: float
     detection_latency_ms: float
+    capture_latency_ms: float
     fired_count: int
 
 

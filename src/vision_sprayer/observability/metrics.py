@@ -12,6 +12,7 @@ class MetricsCollector:
         frame: Frame,
         now: float,
         loop_started_at: float,
+        capture_finished_at: float,
         detection_started_at: float,
         detection_finished_at: float,
         fired_count: int,
@@ -26,6 +27,7 @@ class MetricsCollector:
             fps=fps,
             frame_age_ms=(now - frame.produced_at) * 1000,
             loop_latency_ms=loop_latency * 1000,
+            capture_latency_ms=(capture_finished_at - loop_started_at) * 1000,
             detection_latency_ms=(detection_finished_at - detection_started_at) * 1000,
             fired_count=fired_count,
         )
