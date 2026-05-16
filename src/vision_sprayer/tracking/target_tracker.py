@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from .domain import Detection, Point, TrackState
+from vision_sprayer.domain.models import Detection, Point, TrackState
 
 
 class TargetTracker:
@@ -42,4 +40,3 @@ class TargetTracker:
             age_frames=self._state.age_frames + 1,
         )
         return self._state
-

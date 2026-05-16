@@ -1,10 +1,10 @@
-from __future__ import annotations
-
 import argparse
 import time
 
-from .orchestrator import SprayerOrchestrator
-from .renderer import PygameRenderer
+import pygame
+
+from vision_sprayer.adapters.rendering.pygame_renderer import PygameRenderer
+from vision_sprayer.pipeline.orchestrator import SprayerOrchestrator
 
 
 def parse_args() -> argparse.Namespace:
@@ -19,8 +19,6 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    import pygame
-
     args = parse_args()
     pygame.init()
     width, height = 960, 540

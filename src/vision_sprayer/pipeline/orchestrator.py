@@ -1,12 +1,12 @@
-from __future__ import annotations
+from typing import Self
 
-from .actuator import FakeActuator
-from .detector import SimulatedDetector
-from .domain import Point, RuntimeSnapshot
-from .frame_source import SimulatedFrameSource
-from .metrics import MetricsCollector
-from .targeting import TargetingPolicy
-from .tracker import TargetTracker
+from vision_sprayer.adapters.actuator.fake_actuator import FakeActuator
+from vision_sprayer.adapters.simulation.simulated_detector import SimulatedDetector
+from vision_sprayer.adapters.simulation.simulated_frame_source import SimulatedFrameSource
+from vision_sprayer.domain.models import Point, RuntimeSnapshot
+from vision_sprayer.observability.metrics import MetricsCollector
+from vision_sprayer.targeting.targeting_policy import TargetingPolicy
+from vision_sprayer.tracking.target_tracker import TargetTracker
 
 
 class SprayerOrchestrator:
@@ -29,7 +29,7 @@ class SprayerOrchestrator:
         self.metrics = metrics
 
     @classmethod
-    def default(cls, width: int = 960, height: int = 540) -> "SprayerOrchestrator":
+    def default(cls, width: int = 960, height: int = 540) -> Self:
         return cls(
             frame_source=SimulatedFrameSource(width=width, height=height),
             detector=SimulatedDetector(),
@@ -68,4 +68,3 @@ class SprayerOrchestrator:
             actuator_event=actuator_event,
             metrics=metrics,
         )
-

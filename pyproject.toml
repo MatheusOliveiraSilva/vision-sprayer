@@ -8,7 +8,7 @@ dependencies = [
 ]
 
 [project.scripts]
-vision-sprayer = "vision_sprayer.app:main"
+vision-sprayer = "vision_sprayer.app.cli:main"
 
 [project.optional-dependencies]
 dev = [

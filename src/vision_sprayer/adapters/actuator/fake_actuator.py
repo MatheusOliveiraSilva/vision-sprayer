@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from .domain import ActuatorEvent, AimCommand
+from vision_sprayer.domain.models import ActuatorEvent, AimCommand
 
 
 class FakeActuator:
@@ -24,4 +22,3 @@ class FakeActuator:
         )
         self.last_event = event
         return event
-

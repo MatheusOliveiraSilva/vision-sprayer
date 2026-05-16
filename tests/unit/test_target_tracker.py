@@ -1,5 +1,5 @@
-from vision_sprayer.domain import Detection, Point, Rect
-from vision_sprayer.tracker import TargetTracker
+from vision_sprayer.domain.models import Detection, Point, Rect
+from vision_sprayer.tracking.target_tracker import TargetTracker
 
 
 def test_tracker_initializes_from_first_detection() -> None:
@@ -40,4 +40,3 @@ def test_tracker_smooths_subsequent_detections() -> None:
 
     assert state.target_center == Point(50, 25)
     assert state.age_frames == 2
-

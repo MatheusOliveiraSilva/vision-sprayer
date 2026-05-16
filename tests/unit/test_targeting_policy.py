@@ -1,5 +1,5 @@
-from vision_sprayer.domain import Point, TrackState
-from vision_sprayer.targeting import TargetingPolicy
+from vision_sprayer.domain.models import Point, TrackState
+from vision_sprayer.targeting.targeting_policy import TargetingPolicy
 
 
 def test_targeting_moves_aim_toward_track_without_overshooting() -> None:
@@ -60,4 +60,3 @@ def test_targeting_respects_fire_cooldown() -> None:
     assert first.fire is True
     assert second.fire is False
     assert second.reason == "cooldown"
-

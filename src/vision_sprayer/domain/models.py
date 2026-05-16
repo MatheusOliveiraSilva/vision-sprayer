@@ -1,7 +1,6 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 from math import hypot
+from typing import Self
 
 
 @dataclass(frozen=True)
@@ -9,10 +8,10 @@ class Point:
     x: float
     y: float
 
-    def distance_to(self, other: "Point") -> float:
+    def distance_to(self, other: Self) -> float:
         return hypot(self.x - other.x, self.y - other.y)
 
-    def move_toward(self, target: "Point", max_distance: float) -> "Point":
+    def move_toward(self, target: Self, max_distance: float) -> Self:
         distance = self.distance_to(target)
         if distance == 0 or distance <= max_distance:
             return target
@@ -96,4 +95,3 @@ class RuntimeSnapshot:
     command: AimCommand
     actuator_event: ActuatorEvent
     metrics: RuntimeSample
-

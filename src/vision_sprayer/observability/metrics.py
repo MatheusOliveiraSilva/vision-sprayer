@@ -1,8 +1,6 @@
-from __future__ import annotations
-
 from collections import deque
 
-from .domain import Frame, RuntimeSample
+from vision_sprayer.domain.models import Frame, RuntimeSample
 
 
 class MetricsCollector:
@@ -31,4 +29,3 @@ class MetricsCollector:
             detection_latency_ms=(detection_finished_at - detection_started_at) * 1000,
             fired_count=fired_count,
         )
-

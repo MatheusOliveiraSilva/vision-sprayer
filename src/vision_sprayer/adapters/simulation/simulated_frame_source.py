@@ -1,8 +1,6 @@
-from __future__ import annotations
-
 from math import sin
 
-from .domain import Frame, Point, Rect
+from vision_sprayer.domain.models import Frame, Point, Rect
 
 
 class SimulatedFrameSource:
@@ -27,4 +25,3 @@ class SimulatedFrameSource:
             height=self.height,
             target=Rect(center=Point(x, y), width=56, height=120),
         )
-

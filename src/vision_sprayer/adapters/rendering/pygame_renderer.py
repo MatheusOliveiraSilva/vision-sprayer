@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from .domain import RuntimeSnapshot
+from vision_sprayer.domain.models import RuntimeSnapshot
 
 
 class PygameRenderer:
@@ -49,4 +47,3 @@ class PygameRenderer:
         for index, line in enumerate(lines):
             surface = self.font.render(line, True, (225, 230, 235))
             self.screen.blit(surface, (18, 16 + index * 24))
-

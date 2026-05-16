@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from .domain import Detection, Frame
+from vision_sprayer.domain.models import Detection, Frame
 
 
 class SimulatedDetector:
@@ -20,4 +18,3 @@ class SimulatedDetector:
             bbox=frame.target,
             confidence=self.confidence,
         )
-

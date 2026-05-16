@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from .domain import AimCommand, Point, TrackState
+from vision_sprayer.domain.models import AimCommand, Point, TrackState
 
 
 class TargetingPolicy:
@@ -51,4 +49,3 @@ class TargetingPolicy:
             distance_to_target=distance,
             reason=reason,
         )
-

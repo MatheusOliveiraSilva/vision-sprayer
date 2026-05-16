@@ -7,13 +7,21 @@ The first goal is not visual realism. The first goal is to see the runtime loop 
 ## Architecture
 
 ```text
-SimulatedFrameSource
-  -> SimulatedDetector
-  -> TargetTracker
-  -> TargetingPolicy
-  -> FakeActuator
-  -> MetricsCollector
-  -> PygameRenderer
+src/vision_sprayer/
+  app/             CLI and runnable app entrypoints
+  domain/          value objects shared by the pipeline
+  adapters/        simulation, rendering, actuator, camera/model later
+  pipeline/        orchestration and frame lifecycle
+  tracking/        target state across frames
+  targeting/       aim/fire decision logic
+  observability/   FPS and latency metrics
+```
+
+Runtime flow:
+
+```text
+SimulatedFrameSource -> SimulatedDetector -> TargetTracker
+  -> TargetingPolicy -> FakeActuator -> MetricsCollector -> PygameRenderer
 ```
 
 ## Responsibility boundaries
@@ -39,6 +47,12 @@ Or without activating the environment:
 
 ```bash
 PYTHONPATH=src uv run python -m vision_sprayer.app
+```
+
+Or through the CLI script:
+
+```bash
+PYTHONPATH=src uv run vision-sprayer
 ```
 
 ## Test
