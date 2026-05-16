@@ -1,4 +1,4 @@
-# Pet Bottle Sprayer Sim
+# Vision Sprayer
 
 V0 simulation for a perception -> decision -> fake actuation loop.
 
@@ -32,13 +32,13 @@ SimulatedFrameSource
 ```bash
 uv sync --extra dev --no-editable
 source .venv/bin/activate
-PYTHONPATH=src python -m sprayer_sim.app
+PYTHONPATH=src python -m vision_sprayer.app
 ```
 
 Or without activating the environment:
 
 ```bash
-PYTHONPATH=src uv run python -m sprayer_sim.app
+PYTHONPATH=src uv run python -m vision_sprayer.app
 ```
 
 ## Test
@@ -50,13 +50,13 @@ uv run pytest
 ## Smoke
 
 ```bash
-PYTHONPATH=src SDL_VIDEODRIVER=dummy uv run python -m sprayer_sim.app --smoke-frames 5
+PYTHONPATH=src SDL_VIDEODRIVER=dummy uv run python -m vision_sprayer.app --smoke-frames 5
 ```
 
 ## Troubleshooting
 
-If `python -m sprayer_sim.app` says `No module named 'sprayer_sim'`, run it with the source path:
+If `python -m vision_sprayer.app` says `No module named 'vision_sprayer'`, run it with the source path:
 
 ```bash
-PYTHONPATH=src python -m sprayer_sim.app
+PYTHONPATH=src python -m vision_sprayer.app
 ```

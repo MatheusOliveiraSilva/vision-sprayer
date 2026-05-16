@@ -1,5 +1,5 @@
-from sprayer_sim.domain import Point, TrackState
-from sprayer_sim.targeting import TargetingPolicy
+from vision_sprayer.domain import Point, TrackState
+from vision_sprayer.targeting import TargetingPolicy
 
 
 def test_targeting_moves_aim_toward_track_without_overshooting() -> None:

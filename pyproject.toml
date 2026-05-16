@@ -1,14 +1,14 @@
 [project]
-name = "pet-bottle-sprayer-sim"
+name = "vision-sprayer"
 version = "0.1.0"
-description = "Realtime V0 simulation for an embodied AI pet bottle sprayer."
+description = "Realtime V0 simulation for an embodied AI vision sprayer."
 requires-python = ">=3.11"
 dependencies = [
   "pygame>=2.6.0",
 ]
 
 [project.scripts]
-sprayer-sim = "sprayer_sim.app:main"
+vision-sprayer = "vision_sprayer.app:main"
 
 [project.optional-dependencies]
 dev = [

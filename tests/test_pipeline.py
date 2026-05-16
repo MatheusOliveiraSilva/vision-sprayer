@@ -1,4 +1,4 @@
-from sprayer_sim.orchestrator import SprayerOrchestrator
+from vision_sprayer.orchestrator import SprayerOrchestrator
 
 
 def test_orchestrator_runs_complete_fake_pipeline() -> None:

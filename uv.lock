@@ -30,7 +30,7 @@ wheels = [
 ]
 
 [[package]]
-name = "pet-bottle-sprayer-sim"
+name = "vision-sprayer"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

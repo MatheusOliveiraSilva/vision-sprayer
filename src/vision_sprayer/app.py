@@ -8,7 +8,7 @@ from .renderer import PygameRenderer
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the pet bottle sprayer V0 simulation.")
+    parser = argparse.ArgumentParser(description="Run the vision sprayer V0 simulation.")
     parser.add_argument(
         "--smoke-frames",
         type=int,
@@ -25,7 +25,7 @@ def main() -> None:
     pygame.init()
     width, height = 960, 540
     screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Pet Bottle Sprayer Sim V0")
+    pygame.display.set_caption("Vision Sprayer V0")
     clock = pygame.time.Clock()
 
     orchestrator = SprayerOrchestrator.default(width=width, height=height)

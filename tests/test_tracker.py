@@ -1,5 +1,5 @@
-from sprayer_sim.domain import Detection, Point, Rect
-from sprayer_sim.tracker import TargetTracker
+from vision_sprayer.domain import Detection, Point, Rect
+from vision_sprayer.tracker import TargetTracker
 
 
 def test_tracker_initializes_from_first_detection() -> None:
