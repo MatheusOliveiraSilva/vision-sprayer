@@ -1,0 +1,30 @@
+[project]
+name = "pet-bottle-sprayer-sim"
+version = "0.1.0"
+description = "Realtime V0 simulation for an embodied AI pet bottle sprayer."
+requires-python = ">=3.11"
+dependencies = [
+  "pygame>=2.6.0",
+]
+
+[project.scripts]
+sprayer-sim = "sprayer_sim.app:main"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
