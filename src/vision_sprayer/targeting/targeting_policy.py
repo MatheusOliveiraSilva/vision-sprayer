@@ -1,4 +1,4 @@
-from vision_sprayer.domain.models import AimCommand, Point, TrackState
+from vision_sprayer.domain.models import AimCommand, LockState, Point, TrackState
 
 
 class TargetingPolicy:
@@ -28,19 +28,29 @@ class TargetingPolicy:
                 distance_to_target=float("inf"),
                 reason="no_target",
             )
+        if track.lock_state == LockState.LOST:
+            return AimCommand(
+                aim_point=self.aim_point,
+                fire=False,
+                distance_to_target=self.aim_point.distance_to(track.target_center),
+                reason="lost",
+            )
 
         max_step = self.aim_speed_px_per_second * dt
         self.aim_point = self.aim_point.move_toward(track.target_center, max_step)
         distance = self.aim_point.distance_to(track.target_center)
 
         cooldown_ready = now - self._last_fire_at >= self.fire_cooldown_s
-        should_fire = distance <= self.fire_threshold_px and cooldown_ready
+        has_lock = track.lock_state == LockState.LOCKED
+        should_fire = distance <= self.fire_threshold_px and cooldown_ready and has_lock
 
         if should_fire:
             self._last_fire_at = now
 
         reason = "aligned" if should_fire else "tracking"
-        if distance <= self.fire_threshold_px and not cooldown_ready:
+        if track.lock_state != LockState.LOCKED:
+            reason = track.lock_state.value
+        if distance <= self.fire_threshold_px and has_lock and not cooldown_ready:
             reason = "cooldown"
 
         return AimCommand(

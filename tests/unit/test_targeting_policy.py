@@ -1,4 +1,4 @@
-from vision_sprayer.domain.models import Point, TrackState
+from vision_sprayer.domain.models import LockState, Point, TrackState
 from vision_sprayer.targeting.targeting_policy import TargetingPolicy
 
 
@@ -13,6 +13,8 @@ def test_targeting_moves_aim_toward_track_without_overshooting() -> None:
         confidence=1,
         updated_at=0,
         age_frames=1,
+        lock_state=LockState.LOCKED,
+        missed_frames=0,
     )
 
     command = policy.decide(track, dt=0.25, now=0)
@@ -33,6 +35,8 @@ def test_targeting_fires_when_aligned_and_cooldown_ready() -> None:
         confidence=1,
         updated_at=0,
         age_frames=1,
+        lock_state=LockState.LOCKED,
+        missed_frames=0,
     )
 
     command = policy.decide(track, dt=0.016, now=1.0)
@@ -52,6 +56,8 @@ def test_targeting_respects_fire_cooldown() -> None:
         confidence=1,
         updated_at=0,
         age_frames=1,
+        lock_state=LockState.LOCKED,
+        missed_frames=0,
     )
 
     first = policy.decide(track, dt=0.016, now=1.0)

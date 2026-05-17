@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from enum import StrEnum
 from math import hypot
 from typing import Any
 from typing import Self
@@ -57,12 +58,22 @@ class Detection:
     confidence: float
 
 
+class LockState(StrEnum):
+    NO_TARGET = "no_target"
+    ACQUIRING = "acquiring"
+    LOCKED = "locked"
+    LOST = "lost"
+
+
 @dataclass(frozen=True)
 class TrackState:
     target_center: Point
     confidence: float
     updated_at: float
     age_frames: int
+    lock_state: LockState
+    missed_frames: int
+    raw_center: Point | None = None
 
 
 @dataclass(frozen=True)
@@ -87,6 +98,9 @@ class RuntimeSample:
     loop_latency_ms: float
     detection_latency_ms: float
     capture_latency_ms: float
+    track_latency_ms: float
+    decision_latency_ms: float
+    render_latency_ms: float
     fired_count: int
 
 

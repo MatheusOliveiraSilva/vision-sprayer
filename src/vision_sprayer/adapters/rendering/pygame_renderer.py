@@ -18,6 +18,10 @@ class PygameRenderer:
             target_rect = pg.Rect(target.left, target.top, target.width, target.height)
             pg.draw.rect(self.screen, (45, 170, 120), target_rect, width=3, border_radius=10)
 
+        if snapshot.track is not None:
+            track = snapshot.track.target_center
+            pg.draw.circle(self.screen, (255, 90, 60), (int(track.x), int(track.y)), 7)
+
         aim = snapshot.command.aim_point
         pg.draw.circle(self.screen, (240, 235, 90), (int(aim.x), int(aim.y)), 24, width=2)
         pg.draw.line(self.screen, (240, 235, 90), (aim.x - 34, aim.y), (aim.x + 34, aim.y), 2)
@@ -56,10 +60,15 @@ class PygameRenderer:
             f"FPS {metrics.fps:5.1f}",
             f"frame age {metrics.frame_age_ms:5.1f} ms",
             f"capture {metrics.capture_latency_ms:5.1f} ms",
-            f"loop {metrics.loop_latency_ms:5.1f} ms",
             f"detect {metrics.detection_latency_ms:5.1f} ms",
+            f"track {metrics.track_latency_ms:5.1f} ms",
+            f"decision {metrics.decision_latency_ms:5.1f} ms",
+            f"render {metrics.render_latency_ms:5.1f} ms",
+            f"loop {metrics.loop_latency_ms:5.1f} ms",
             f"distance {snapshot.command.distance_to_target:5.1f} px",
-            f"state {snapshot.command.reason}",
+            f"lock {snapshot.track.lock_state if snapshot.track is not None else 'no_target'}",
+            f"conf {snapshot.detection.confidence if snapshot.detection is not None else 0.0:4.2f}",
+            f"policy {snapshot.command.reason}",
             f"fires {metrics.fired_count}",
         ]
 

@@ -27,6 +27,20 @@ OpenCVCameraSource -> YoloBottleDetector -> TargetTracker
   -> TargetingPolicy -> FakeActuator -> MetricsCollector -> OpenCVRenderer
 ```
 
+The visual overlay separates three different runtime states:
+
+```text
+raw detection box  -> where the model thinks the target is now
+tracker point      -> smoothed target state across frames
+aim crosshair      -> where the actuator can currently point
+```
+
+Tracker lifecycle:
+
+```text
+NO_TARGET -> ACQUIRING -> LOCKED -> LOST
+```
+
 ## Responsibility boundaries
 
 - `FrameSource`: owns simulated world state and produces timestamped frames.
@@ -74,6 +88,8 @@ Useful options:
 --device mps
 --no-window
 ```
+
+The overlay shows capture, detection, tracking, decision, render, and loop latency.
 
 ## Test
 

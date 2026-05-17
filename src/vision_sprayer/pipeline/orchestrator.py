@@ -38,8 +38,12 @@ class VisionPipeline:
         detection = self.detector.detect(frame, now)
         detection_finished_at = time.perf_counter()
 
+        track_started_at = time.perf_counter()
         track = self.tracker.update(detection)
+        track_finished_at = time.perf_counter()
+        decision_started_at = time.perf_counter()
         command = self.targeting.decide(track, dt=dt, now=now)
+        decision_finished_at = time.perf_counter()
         actuator_event = self.actuator.apply(command, now=now)
         loop_finished_at = time.perf_counter()
         metrics = self.metrics.record(
@@ -49,6 +53,10 @@ class VisionPipeline:
             capture_finished_at=capture_finished_at,
             detection_started_at=detection_started_at,
             detection_finished_at=detection_finished_at,
+            track_started_at=track_started_at,
+            track_finished_at=track_finished_at,
+            decision_started_at=decision_started_at,
+            decision_finished_at=decision_finished_at,
             fired_count=self.actuator.fired_count,
         )
 

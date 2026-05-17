@@ -1,4 +1,4 @@
-from vision_sprayer.domain.models import Detection, Point, Rect
+from vision_sprayer.domain.models import Detection, LockState, Point, Rect
 from vision_sprayer.tracking.target_tracker import TargetTracker
 
 
@@ -16,10 +16,11 @@ def test_tracker_initializes_from_first_detection() -> None:
     assert state.target_center == Point(20, 30)
     assert state.confidence == 0.9
     assert state.age_frames == 1
+    assert state.lock_state == LockState.ACQUIRING
 
 
 def test_tracker_smooths_subsequent_detections() -> None:
-    tracker = TargetTracker(smoothing=0.5)
+    tracker = TargetTracker(smoothing=0.5, locked_after_frames=2)
     tracker.update(
         Detection(
             frame_sequence=1,
@@ -40,10 +41,11 @@ def test_tracker_smooths_subsequent_detections() -> None:
 
     assert state.target_center == Point(50, 25)
     assert state.age_frames == 2
+    assert state.lock_state == LockState.LOCKED
 
 
-def test_tracker_clears_state_when_detection_is_missing() -> None:
-    tracker = TargetTracker(smoothing=0.5)
+def test_tracker_tolerates_short_detection_gaps() -> None:
+    tracker = TargetTracker(smoothing=0.5, locked_after_frames=1, lost_after_missed_frames=3)
     tracker.update(
         Detection(
             frame_sequence=1,
@@ -55,5 +57,25 @@ def test_tracker_clears_state_when_detection_is_missing() -> None:
 
     state = tracker.update(None)
 
-    assert state is None
-    assert tracker.state is None
+    assert state is not None
+    assert state.lock_state == LockState.LOCKED
+    assert state.missed_frames == 1
+
+
+def test_tracker_marks_target_lost_after_consecutive_misses() -> None:
+    tracker = TargetTracker(smoothing=0.5, locked_after_frames=1, lost_after_missed_frames=2)
+    tracker.update(
+        Detection(
+            frame_sequence=1,
+            observed_at=10,
+            bbox=Rect(center=Point(20, 30), width=10, height=10),
+            confidence=1,
+        )
+    )
+
+    tracker.update(None)
+    state = tracker.update(None)
+
+    assert state is not None
+    assert state.lock_state == LockState.LOST
+    assert state.missed_frames == 2

@@ -15,6 +15,10 @@ class MetricsCollector:
         capture_finished_at: float,
         detection_started_at: float,
         detection_finished_at: float,
+        track_started_at: float,
+        track_finished_at: float,
+        decision_started_at: float,
+        decision_finished_at: float,
         fired_count: int,
     ) -> RuntimeSample:
         loop_latency = now - loop_started_at
@@ -29,5 +33,8 @@ class MetricsCollector:
             loop_latency_ms=loop_latency * 1000,
             capture_latency_ms=(capture_finished_at - loop_started_at) * 1000,
             detection_latency_ms=(detection_finished_at - detection_started_at) * 1000,
+            track_latency_ms=(track_finished_at - track_started_at) * 1000,
+            decision_latency_ms=(decision_finished_at - decision_started_at) * 1000,
+            render_latency_ms=0.0,
             fired_count=fired_count,
         )
