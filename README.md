@@ -4,6 +4,8 @@ Realtime perception -> decision -> fake actuation loop.
 
 The first goal is to see the runtime loop alive and keep the core behavior testable.
 
+Long-term target: [docs/endgoal.md](docs/endgoal.md).
+
 ## Architecture
 
 ```text
