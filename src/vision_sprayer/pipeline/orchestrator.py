@@ -36,10 +36,10 @@ class VisionPipeline:
     def tick(self, now: float, dt: float) -> RuntimeSnapshot:
         timings = StepTimings()
 
-        frame = timings.measure_capture(lambda: self.capture_frame(now))
-        detection = timings.measure_detection(lambda: self.detect_target(frame, now))
-        track = timings.measure_tracking(lambda: self.update_track(detection))
-        command = timings.measure_decision(lambda: self.decide_action(track, dt, now))
+        frame = timings.measure_capture(self.capture_frame, now)
+        detection = timings.measure_detection(self.detect_target, frame, now)
+        track = timings.measure_tracking(self.update_track, detection)
+        command = timings.measure_decision(self.decide_action, track, dt, now)
         actuator_event = self.apply_action(command, now)
         timings.finish_loop()
         metrics = self.collect_metrics(frame, timings)
