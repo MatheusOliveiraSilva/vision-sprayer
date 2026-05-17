@@ -55,6 +55,25 @@ NO_TARGET -> ACQUIRING -> LOCKED -> LOST
 - `Renderer`: draws state and metrics; no decision logic belongs here.
 - `Orchestrator`: wires components and owns the frame lifecycle.
 
+## Hardware Boundary
+
+The first physical boundary is actuator-only. The vision loop still runs on the computer, but the actuator can later be swapped:
+
+```text
+FakeActuator
+  -> SerialActuator
+  -> ESP32 firmware
+  -> servo / pump driver
+```
+
+The current serial protocol is intentionally human-readable:
+
+```text
+AIM pan=90.00 tilt=90.00 fire=0
+```
+
+`pan` and `tilt` are servo angles derived from the current aim point. `fire=1` means the targeting policy decided the system is aligned and cooldown is ready.
+
 ## How to read the codebase
 
 Start with the runtime path, not implementation details:
