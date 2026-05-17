@@ -1,6 +1,7 @@
 from collections import deque
 
 from vision_sprayer.domain.models import Frame, RuntimeSample
+from vision_sprayer.observability.timing import StepTimings
 
 
 class MetricsCollector:
@@ -10,18 +11,10 @@ class MetricsCollector:
     def record(
         self,
         frame: Frame,
-        now: float,
-        loop_started_at: float,
-        capture_finished_at: float,
-        detection_started_at: float,
-        detection_finished_at: float,
-        track_started_at: float,
-        track_finished_at: float,
-        decision_started_at: float,
-        decision_finished_at: float,
+        timings: StepTimings,
         fired_count: int,
     ) -> RuntimeSample:
-        loop_latency = now - loop_started_at
+        loop_latency = timings.loop_finished_at - timings.loop_started_at
         self._loop_durations.append(loop_latency)
 
         avg_loop = sum(self._loop_durations) / len(self._loop_durations)
@@ -29,12 +22,12 @@ class MetricsCollector:
 
         return RuntimeSample(
             fps=fps,
-            frame_age_ms=(now - frame.produced_at) * 1000,
+            frame_age_ms=(timings.loop_finished_at - frame.produced_at) * 1000,
             loop_latency_ms=loop_latency * 1000,
-            capture_latency_ms=(capture_finished_at - loop_started_at) * 1000,
-            detection_latency_ms=(detection_finished_at - detection_started_at) * 1000,
-            track_latency_ms=(track_finished_at - track_started_at) * 1000,
-            decision_latency_ms=(decision_finished_at - decision_started_at) * 1000,
+            capture_latency_ms=timings.capture_latency_s * 1000,
+            detection_latency_ms=timings.detection_latency_s * 1000,
+            track_latency_ms=timings.tracking_latency_s * 1000,
+            decision_latency_ms=timings.decision_latency_s * 1000,
             render_latency_ms=0.0,
             fired_count=fired_count,
         )

@@ -52,6 +52,36 @@ NO_TARGET -> ACQUIRING -> LOCKED -> LOST
 - `Renderer`: draws state and metrics; no decision logic belongs here.
 - `Orchestrator`: wires components and owns the frame lifecycle.
 
+## How to read the codebase
+
+Start with the runtime path, not implementation details:
+
+```text
+app/cli.py
+  -> chooses sim, camera, or cameras mode
+
+pipeline/factories.py
+  -> wires concrete adapters into the pipeline
+
+pipeline/orchestrator.py
+  -> describes one frame lifecycle:
+     capture frame
+     detect target
+     update track
+     decide action
+     apply action
+     collect metrics
+     build snapshot
+
+targeting/targeting_policy.py
+  -> explains when the aim moves and when fire is allowed
+
+tracking/target_tracker.py
+  -> explains target lock lifecycle across frames
+```
+
+Adapters are implementation edges. Read them after the pipeline is clear.
+
 ## Setup
 
 ```bash
