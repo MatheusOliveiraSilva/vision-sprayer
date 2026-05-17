@@ -1,1 +1,1 @@
-"""Vision sprayer V0 simulation."""
+"""Vision sprayer realtime perception pipeline."""

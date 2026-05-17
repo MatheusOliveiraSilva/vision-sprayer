@@ -1,4 +1,4 @@
-from vision_sprayer.app.cli import main
+from vision_sprayer.main import main
 
 
 if __name__ == "__main__":

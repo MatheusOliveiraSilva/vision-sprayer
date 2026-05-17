@@ -8,9 +8,12 @@ The first goal is to see the runtime loop alive and keep the core behavior testa
 
 ```text
 src/vision_sprayer/
-  app/             CLI and runnable app entrypoints
+  main.py          default camera scenario entrypoint
+  config.py        runtime settings
+  scenarios/       camera and simulation composition
+  runners/         visual loop runners
   domain/          value objects shared by the pipeline
-  adapters/        simulation, rendering, actuator, camera/model later
+  adapters/        camera, model, simulation, rendering, actuator
   pipeline/        orchestration and frame lifecycle
   tracking/        target state across frames
   targeting/       aim/fire decision logic
@@ -57,11 +60,17 @@ NO_TARGET -> ACQUIRING -> LOCKED -> LOST
 Start with the runtime path, not implementation details:
 
 ```text
-app/cli.py
-  -> chooses sim, camera, or cameras mode
+main.py
+  -> runs the configured camera scenario
 
-pipeline/factories.py
-  -> wires concrete adapters into the pipeline
+config.py
+  -> contains runtime settings
+
+scenarios/camera.py
+  -> wires camera/model/rendering adapters
+
+scenarios/simulation.py
+  -> wires simulation adapters for tests/smoke
 
 pipeline/orchestrator.py
   -> describes one frame lifecycle:
@@ -91,32 +100,40 @@ uv sync --extra dev --no-editable
 ## Simulation
 
 ```bash
-PYTHONPATH=src uv run python -m vision_sprayer.app sim
+PYTHONPATH=src SDL_VIDEODRIVER=dummy uv run python - <<'PY'
+from vision_sprayer.scenarios.simulation import SimulationScenario
+
+SimulationScenario(smoke_frames=5).run()
+PY
 ```
 
 ## Camera Sources
 
 ```bash
-PYTHONPATH=src uv run python -m vision_sprayer.app cameras
+PYTHONPATH=src uv run python - <<'PY'
+from vision_sprayer.config import RuntimeConfig
+from vision_sprayer.scenarios.camera import CameraScenario
+
+CameraScenario(RuntimeConfig(list_camera_sources=True)).run()
+PY
 ```
 
-On macOS with iPhone, connect the iPhone with USB, trust the Mac if prompted, and select/enable Continuity Camera if macOS asks. The camera source is usually `0`, but confirm with the `cameras` command.
+On macOS with iPhone, connect the iPhone with USB, trust the Mac if prompted, and select/enable Continuity Camera if macOS asks. The camera source is usually `0`, but confirm with the camera-source listing snippet above.
 
 ## Camera + YOLO Bottle Detection
 
 ```bash
-PYTHONPATH=src uv run python -m vision_sprayer.app camera --source 0 --device cpu
+PYTHONPATH=src uv run python -m vision_sprayer
 ```
 
-Useful options:
+Edit `src/vision_sprayer/config.py` to change:
 
-```bash
---model yolo11n.pt
---target bottle
---confidence 0.25
---device cpu
---device mps
---no-window
+```python
+camera_source = 0
+model_name = "yolo11n.pt"
+target_class_name = "bottle"
+confidence_threshold = 0.25
+device = "cpu"
 ```
 
 The overlay shows capture, detection, tracking, decision, render, and loop latency.
@@ -130,6 +147,16 @@ uv run pytest
 ## Smoke
 
 ```bash
-PYTHONPATH=src SDL_VIDEODRIVER=dummy uv run python -m vision_sprayer.app sim --smoke-frames 5
-PYTHONPATH=src uv run python -m vision_sprayer.app camera --source 0 --device cpu --smoke-frames 1 --no-window
+PYTHONPATH=src SDL_VIDEODRIVER=dummy uv run python - <<'PY'
+from vision_sprayer.scenarios.simulation import SimulationScenario
+
+SimulationScenario(smoke_frames=5).run()
+PY
+
+PYTHONPATH=src uv run python - <<'PY'
+from vision_sprayer.config import RuntimeConfig
+from vision_sprayer.scenarios.camera import CameraScenario
+
+CameraScenario(RuntimeConfig(smoke_frames=1, display_window=False)).run()
+PY
 ```

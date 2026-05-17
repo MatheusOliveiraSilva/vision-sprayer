@@ -1,7 +1,7 @@
 [project]
 name = "vision-sprayer"
 version = "0.1.0"
-description = "Realtime V0 simulation for an embodied AI vision sprayer."
+description = "Realtime perception pipeline for an embodied AI vision sprayer."
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=2.4.5",
@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.scripts]
-vision-sprayer = "vision_sprayer.app.cli:main"
+vision-sprayer = "vision_sprayer.main:main"
 
 [project.optional-dependencies]
 dev = [

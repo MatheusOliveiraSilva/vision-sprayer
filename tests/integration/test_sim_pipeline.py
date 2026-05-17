@@ -1,8 +1,8 @@
-from vision_sprayer.pipeline.factories import create_sim_pipeline
+from vision_sprayer.scenarios.simulation import SimulationScenario
 
 
 def test_orchestrator_runs_complete_fake_pipeline() -> None:
-    orchestrator = create_sim_pipeline(width=320, height=240)
+    orchestrator = SimulationScenario(width=320, height=240).build_pipeline()
 
     snapshot = orchestrator.tick(now=1.0, dt=0.016)
 
@@ -15,7 +15,7 @@ def test_orchestrator_runs_complete_fake_pipeline() -> None:
 
 
 def test_orchestrator_preserves_state_across_ticks() -> None:
-    orchestrator = create_sim_pipeline(width=320, height=240)
+    orchestrator = SimulationScenario(width=320, height=240).build_pipeline()
 
     first = orchestrator.tick(now=1.0, dt=0.016)
     second = orchestrator.tick(now=1.1, dt=0.1)
